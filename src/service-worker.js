@@ -1,10 +1,8 @@
-/* eslint-disable no-restricted-globals */
-
 import { clientsClaim } from "workbox-core";
 import { ExpirationPlugin } from "workbox-expiration";
 import { precacheAndRoute, createHandlerBoundToURL } from "workbox-precaching";
 import { registerRoute } from "workbox-routing";
-import { StaleWhileRevalidate, CacheFirst } from "workbox-strategies";
+import { CacheFirst } from "workbox-strategies";
 import { CacheableResponsePlugin } from "workbox-cacheable-response";
 
 clientsClaim();
@@ -49,14 +47,14 @@ self.addEventListener("message", (event) => {
 });
 
 /**
- * Caches at: runtime
+ * Cache API response
  */
 
 registerRoute(
   ({ url }) =>
     url.origin === "https://content.codecademy.com" &&
     url.pathname.startsWith("/courses/ltp4/books-api/books.json"),
-  new StaleWhileRevalidate({
+  new CacheFirst({
     cacheName: "reader-api-response",
     plugins: [
       new CacheableResponsePlugin({
